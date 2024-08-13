@@ -1,0 +1,14 @@
+[app]
+debug = True
+# Seconds from 1, step 1
+timeout = 5
+
+[logger.file]
+# debug, success, info, warning, error
+level = warning
+path = logs/hv.log
+
+[logger.stdout]
+# debug, success, info, warning, error
+level = debug
+colorize = True
