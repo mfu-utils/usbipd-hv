@@ -4,3 +4,4 @@ __pycache__
 config.ini
 filters.json
 filters.yaml
+build

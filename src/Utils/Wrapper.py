@@ -10,7 +10,6 @@ STOP = f"{ESC}[{END}"
 
 RGB_COLOR_START = f"{START}38;2;"
 RGB_BG_COLOR_START = f"{START}48;2;"
-BOLD_START = f"{START}1m"
 
 
 class Wrapper:
@@ -32,7 +31,3 @@ class Wrapper:
         rgb = Wrapper.get_rgb_as_text(color)
 
         return f"{RGB_BG_COLOR_START}{rgb}m{message}{STOP}"
-
-    @staticmethod
-    def bold(message: str) -> str:
-        return f"{BOLD_START}{message}{STOP}"

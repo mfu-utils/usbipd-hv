@@ -10,6 +10,13 @@ class Device:
         self.__pid = pid
         self.__description = description
         self.__state = state
+        self.__force_on_bind = False
+
+    def set_force_on_bind(self, force: bool):
+        self.__force_on_bind = force
+
+    def get_force_on_bind(self) -> bool:
+        return self.__force_on_bind
 
     def bus_id(self) -> str:
         return self.__bus_id

@@ -6,6 +6,7 @@ from typing import List, Tuple
 from time import sleep
 from sys import exit
 
+from src.DeviceFilter import DeviceFilter
 from src.DevicesFilters import DevicesFilters
 from src.DeviceStatus import DeviceStatus
 from src.FilterMode import FilterMode
@@ -54,9 +55,6 @@ class Hypervisor:
             self.__log.error("filters.path not found in ini file")
             return
 
-        if not os.path.exists(device_filter_path):
-            self.__log.error(f"Filters file not found at '{device_filter_path}'")
-
         filters_service = DevicesFilters(device_filter_path, self.__log)
 
         if not filters_service.success_loaded():
@@ -73,7 +71,7 @@ class Hypervisor:
         except KeyboardInterrupt:
             self.__log.warning("Keyboard interrupt received. Stopping.")
 
-    def __usb_ipd_filter(self, devices: List[Device], filter_by: str, _filter: str, mode: FilterMode) -> List[Device]:
+    def __usb_ipd_filter(self, devices: List[Device], _filter: DeviceFilter) -> List[Device]:
         self.__log.debug("Try filtering usbipd devices")
         filtered = []
 
@@ -82,27 +80,29 @@ class Hypervisor:
                 self.__log.debug(f"Skip device ({device}). Has been attached.")
                 continue
 
-            value = device.__getattribute__(filter_by)()
+            value = device.__getattribute__(_filter.filter_by())()
 
             skip = False
 
-            if mode == FilterMode.Key:
-                if not Filters.filter_key(value, _filter):
+            if _filter.mode() == FilterMode.Key:
+                if not Filters.filter_key(value, _filter.value()):
                     skip = True
 
-            elif mode == FilterMode.Regex:
-                regex = Filters.create_regex_filter(_filter, self.__log)
+            elif _filter.mode() == FilterMode.Regex:
+                regex = Filters.create_regex_filter(_filter.value(), self.__log)
 
                 if not Filters.filter_regex(value, regex):
                     skip = True
 
-            elif mode == FilterMode.Like:
-                if not Filters.filter_like(value, _filter):
+            elif _filter.mode() == FilterMode.Like:
+                if not Filters.filter_like(value, _filter.value()):
                     skip = True
 
             if skip:
-                self.__log.debug(f"Filter device ({device}). Filtered by '{mode.name}'")
+                self.__log.debug(f"Filter device ({device}). Filtered by '{_filter.mode().name}'")
                 continue
+
+            device.set_force_on_bind(_filter.force())
 
             self.__log.debug(f"Append device ({device}).")
             filtered.append(device)
@@ -121,12 +121,12 @@ class Hypervisor:
 
         return True
 
-    def __usb_ipd_bind(self, device: Device, force: bool = False) -> bool:
+    def __usb_ipd_bind(self, device: Device) -> bool:
         self.__log.debug(f'Try bind usbipd device ({device}).')
         cmd = self.CMD_BIND.copy()
         cmd.append(device.bus_id())
 
-        if force:
+        if device.get_force_on_bind():
             cmd.append(self._FORCE)
 
         code, out = run(cmd)
@@ -174,12 +174,7 @@ class Hypervisor:
         filtered: List[Device] = []
 
         for _filter in self.__devices_filters:
-            filtered += self.__usb_ipd_filter(
-                list(set(devices) - set(filtered)),
-                _filter.filter_by(),
-                _filter.value(),
-                _filter.mode(),
-            )
+            filtered += self.__usb_ipd_filter(list(set(devices) - set(filtered)), _filter)
 
         return filtered
 
@@ -190,8 +185,9 @@ class Hypervisor:
                     continue
 
                 if device.state() == DeviceStatus.NotShared:
-                    self.__usb_ipd_bind(device)
-                    break
+                    if self.__usb_ipd_bind(device):
+                        self.__usb_ipd_attach(device)
+                        break
 
                 if device.state() == DeviceStatus.Shared:
                     self.__usb_ipd_attach(device)
