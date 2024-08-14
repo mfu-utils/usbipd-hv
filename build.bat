@@ -28,6 +28,7 @@ copy %BUILD_ASSETS%\build-requirements.txt %BUILD_DIR%
 copy %BUILD_ASSETS%\build.spec %BUILD_DIR%
 copy %BUILD_ASSETS%\ffi.txt %BUILD_DIR%
 copy %BUILD_ASSETS%\icon.ico %BUILD_DIR%
+copy %BUILD_ASSETS%\LICENSE %BUILD_DIR%
 
 :: Set working dir
 cd /d %BUILD_DIR%
@@ -46,4 +47,4 @@ call %PYI% %SPEC_FILE% --workpath %WORKDIR% --distpath . > "%WORKDIR%\build_log.
 
 :: Create archive
 echo Archive creation start.
-tar -cf usbipd-hv.tar filters.yaml config.ini usbipd-hv.exe
+tar -cf usbipd-hv.tar filters.yaml config.ini LICENSE usbipd-hv.exe
