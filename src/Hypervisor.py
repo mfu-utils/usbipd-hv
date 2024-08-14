@@ -187,11 +187,9 @@ class Hypervisor:
                 if device.state() == DeviceStatus.NotShared:
                     if self.__usb_ipd_bind(device):
                         self.__usb_ipd_attach(device)
-                        break
 
-                if device.state() == DeviceStatus.Shared:
+                elif device.state() == DeviceStatus.Shared:
                     self.__usb_ipd_attach(device)
-                    break
 
             if self.__timeout > 0:
                 sleep(float(self.__timeout))
