@@ -16,4 +16,3 @@ call %PY% -m pip upgrade pip
 :: Install requirements
 echo Install requirements into virtual environment
 call %PY% -m pip install -r requirements.txt
-

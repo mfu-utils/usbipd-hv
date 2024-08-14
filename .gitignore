@@ -3,3 +3,4 @@ __pycache__
 /logs/*.log
 config.ini
 filters.json
+filters.yaml
