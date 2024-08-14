@@ -1,5 +1,7 @@
+import os.path
 from typing import Optional
 
+from config import CWD
 from src.Ini import Ini
 from src.Logger.AbstractLogChannel import AbstractLogChannel
 from src.Logger.LogHelper import LogHelper
@@ -7,10 +9,13 @@ from src.Logger.LogHelper import LogHelper
 
 class FileLogChannel(AbstractLogChannel):
     def __init__(self, ini: Ini):
-
-        self.__path = ini.get('logger.file.path')
         self.__level = ini.get('logger.file.level')
         self.__importance = LogHelper.get_importance(self.__level)
+
+        self.__path = ini.get('logger.file.path')
+
+        if not os.path.isabs(self.__path):
+            self.__path = os.path.join(CWD, self.__path)
 
         LogHelper.create_dir_log_if_not_exists(self.__path)
 

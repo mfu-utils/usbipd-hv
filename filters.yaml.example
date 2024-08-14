@@ -1,4 +1,4 @@
 mouse:
-  filter_by: name
+  filter_by: description
   value: "*Mouse*"
   mode: Like

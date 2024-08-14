@@ -2,7 +2,7 @@ from src.Hypervisor import Hypervisor
 from src.Ini import Ini
 from src.Log import Log
 
-INI_FILE_PATH = "config.ini"
+from config import INI_FILE_PATH
 
 
 def main():

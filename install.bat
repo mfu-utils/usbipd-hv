@@ -11,7 +11,7 @@ set "PY=%VENV%\Scripts\python.exe"
 
 :: Update pip into venv
 echo Upgrade pip into virtual environment
-call %PY% -m pip upgrade pip
+call %PY% -m pip install --upgrade pip
 
 :: Install requirements
 echo Install requirements into virtual environment

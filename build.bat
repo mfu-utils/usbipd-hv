@@ -4,7 +4,7 @@ echo Start build usbipd-hv
 
 set "VENV=.venv"
 set "BUILD_DIR=build"
-set "BUILT_TOOLS=build-tools"
+set "BUILD_ASSETS=build-assets"
 set "SCRIPTS=%VENV%\Scripts"
 set "PY=%SCRIPTS%\python.exe"
 set "PYI=%SCRIPTS%\pyinstaller.exe"
@@ -23,9 +23,10 @@ copy config.ini.example %BUILD_DIR%\config.ini
 copy filters.yaml.example %BUILD_DIR%\filters.yaml
 copy hv.py %BUILD_DIR%
 
-copy %BUILT_TOOLS%\build-requirements.txt %BUILD_DIR%
-copy %BUILT_TOOLS%\build.spec %BUILD_DIR%
-copy %BUILT_TOOLS%\ffi.txt %BUILD_DIR%
+copy %BUILD_ASSETS%\build-requirements.txt %BUILD_DIR%
+copy %BUILD_ASSETS%\build.spec %BUILD_DIR%
+copy %BUILD_ASSETS%\ffi.txt %BUILD_DIR%
+copy %BUILD_ASSETS%\icon.ico %BUILD_DIR%
 
 :: Set working dir
 cd /d %BUILD_DIR%
@@ -34,11 +35,14 @@ cd /d %BUILD_DIR%
 IF not exist %WORKDIR% (mkdir %WORKDIR%)
 
 :: Install requirements into build
-call install.bat
-call %PY% -m pip install -r build-requirements.txt
+echo Start install. (%WORKDIR%\install_log.txt)
+call install.bat > "%WORKDIR%\install_log.txt"
+call %PY% -m pip install -r build-requirements.txt >> "%WORKDIR%\install_log.txt"
 
 :: Create .EXE file
+echo Start pyinstaller. (%WORKDIR%\build_log.txt)
 call %PYI% %SPEC_FILE% --workpath %WORKDIR% --distpath . > "%WORKDIR%\build_log.txt" 2>&1
 
 :: Create archive
+echo Archive creation start.
 tar -cf usbipd-hv.tar filters.yaml config.ini usbipd-hv.exe

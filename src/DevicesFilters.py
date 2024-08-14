@@ -1,6 +1,9 @@
+import os
+
 import yaml
 from typing import Optional, List, Tuple
 
+from config import CWD
 from src.Device import Device
 from src.DeviceFilter import DeviceFilter
 from src.FilterMode import FilterMode
@@ -9,9 +12,13 @@ from src.Log import Log
 
 class DevicesFilters:
     def __init__(self, path: str, log: Log):
-        self.__path = path
         self.__log = log
         self.__success_loaded = False
+
+        self.__path = path
+
+        if not os.path.isabs(self.__path):
+            self.__path = os.path.join(CWD, self.__path)
 
         try:
             with open(self.__path, 'r') as f:
