@@ -22,6 +22,7 @@ copy install.bat %BUILD_DIR%
 copy config.ini.example %BUILD_DIR%\config.ini
 copy filters.yaml.example %BUILD_DIR%\filters.yaml
 copy hv.py %BUILD_DIR%
+copy config.py %BUILD_DIR%
 
 copy %BUILD_ASSETS%\build-requirements.txt %BUILD_DIR%
 copy %BUILD_ASSETS%\build.spec %BUILD_DIR%
