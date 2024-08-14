@@ -15,7 +15,7 @@ from src.Utils.Filters import Filters
 
 
 def run(parameters: List[str]) -> Tuple[int, str]:
-    process = subprocess.run(parameters, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    process = subprocess.run(parameters, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     return_code = process.returncode
     out = (process.stdout if return_code == 0 else process.stderr).decode('utf-8')
