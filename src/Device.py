@@ -1,3 +1,5 @@
+from typing import List
+
 from src.DeviceStatus import DeviceStatus
 
 
@@ -24,7 +26,11 @@ class Device:
     def state(self) -> DeviceStatus:
         return self.__state
 
+    @staticmethod
+    def get_available_parameters_list() -> List[str]:
+        return ["bus_id", "vid", "pid", "name"]
+
     def __repr__(self) -> str:
         data = [self.__bus_id, self.__name]
 
-        return f'<Device ({":".join(data)})>'
+        return f'Device({", ".join(data)})'

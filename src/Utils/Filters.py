@@ -44,4 +44,7 @@ class Filters:
 
     @staticmethod
     def filter_key(value: str, _filter: str) -> bool:
-        return value == filter
+        if _filter == "*":
+            return True
+
+        return value == _filter

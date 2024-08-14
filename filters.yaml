@@ -1,0 +1,10 @@
+#exapmle:
+#  filter_by: vid # bus_id, vid, pid, name
+#  value: 1234
+#  mode: key
+#  force: true
+
+mouse:
+  filter_by: bus_id
+  value: 5-1
+  mode: Key

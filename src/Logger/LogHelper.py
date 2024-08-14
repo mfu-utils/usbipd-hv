@@ -9,8 +9,8 @@ class LogHelper:
     LOG_VERBOSE_VERBOSE = 2
 
     LOG_LEVEL_DEBUG = 'debug'
-    LOG_LEVEL_SUCCESS = 'success'
     LOG_LEVEL_INFO = 'info'
+    LOG_LEVEL_SUCCESS = 'success'
     LOG_LEVEL_WARNING = 'warning'
     LOG_LEVEL_ERROR = 'error'
 
@@ -24,8 +24,8 @@ class LogHelper:
 
     LOG_LEVELS_IMPORTANCE = {
         LOG_LEVEL_DEBUG: 1,
-        LOG_LEVEL_SUCCESS: 2,
-        LOG_LEVEL_INFO: 3,
+        LOG_LEVEL_INFO: 2,
+        LOG_LEVEL_SUCCESS: 3,
         LOG_LEVEL_WARNING: 4,
         LOG_LEVEL_ERROR: 5,
     }

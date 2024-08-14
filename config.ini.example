@@ -4,11 +4,14 @@ debug = True
 timeout = 5
 
 [logger.file]
-# debug, success, info, warning, error
-level = warning
+# debug, info, success, warning, error
+level = error
 path = logs/hv.log
 
 [logger.stdout]
-# debug, success, info, warning, error
-level = debug
+# debug, info, success, warning, error
+level = success
 colorize = True
+
+[filters]
+path = filters.yaml

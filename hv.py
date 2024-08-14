@@ -1,4 +1,3 @@
-#!/.venv/bin/python
 from src.Hypervisor import Hypervisor
 from src.Ini import Ini
 from src.Log import Log
@@ -9,9 +8,7 @@ INI_FILE_PATH = "config.ini"
 def main():
     ini = Ini(INI_FILE_PATH)
     log = Log(ini)
-    hv = Hypervisor(ini, log)
-
-    hv.usb_ipd_list()
+    Hypervisor(ini, log)
 
 
 if __name__ == "__main__":
