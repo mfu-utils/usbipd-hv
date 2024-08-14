@@ -27,6 +27,9 @@ class DevicesFilters:
         except FileNotFoundError:
             self.__log.error(f"Cannot get filter file ({self.__path}).")
             return
+        except yaml.YAMLError as e:
+            self.__log.error(f"Cannot parse filter file ({self.__path}). {str(e)}")
+            return
 
         self.__validators = [
             self.__validate_filter_by,
