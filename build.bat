@@ -23,12 +23,12 @@ copy config.ini.example %BUILD_DIR%\config.ini
 copy filters.yaml.example %BUILD_DIR%\filters.yaml
 copy hv.py %BUILD_DIR%
 copy config.py %BUILD_DIR%
+copy LICENSE %BUILD_DIR%
 
 copy %BUILD_ASSETS%\build-requirements.txt %BUILD_DIR%
 copy %BUILD_ASSETS%\build.spec %BUILD_DIR%
 copy %BUILD_ASSETS%\ffi.txt %BUILD_DIR%
 copy %BUILD_ASSETS%\icon.ico %BUILD_DIR%
-copy %BUILD_ASSETS%\LICENSE %BUILD_DIR%
 
 :: Set working dir
 cd /d %BUILD_DIR%
