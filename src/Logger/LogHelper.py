@@ -28,10 +28,6 @@ class LogHelper:
         return log_level.upper()
 
     @staticmethod
-    def get_log_prefix(_time: str, level: str) -> str:
-        return f"[{_time}][{level}]"
-
-    @staticmethod
     def subject_item_object(obj: object) -> str:
         if isinstance(obj, type):
             name = obj.__name__
@@ -45,7 +41,10 @@ class LogHelper:
         return title[0].upper() + title[1:].lower()
 
     @staticmethod
-    def get_normal_log(message: str, subject: Optional[dict] = None) -> str:
+    def get_log(log_level: str, message: str, subject: Optional[dict] = None):
+        _time = LogHelper.get_log_time()
+        level = LogHelper.get_log_level(log_level)
+
         if subject:
             segments = []
 
@@ -56,23 +55,7 @@ class LogHelper:
 
             subject = '|'.join(segments)
 
-        prefix = f"[{subject}]: " if subject else ""
-
-        return f"{prefix}{message}"
-
-    @staticmethod
-    def get_verbose_log(_time: str, level: str, message: str, subject: Optional[dict] = None):
-        prefix = LogHelper.get_log_prefix(_time, level)
-        message = LogHelper.get_normal_log(message, subject)
-
-        return f"{prefix}{'' if subject else ': '}{message}"
-
-    @staticmethod
-    def get_log(log_level: str, message: str, subject: Optional[dict] = None):
-        _time = LogHelper.get_log_time()
-        level = LogHelper.get_log_level(log_level)
-
-        return LogHelper.get_verbose_log(_time, level, message, subject)
+        return f"[{_time}][{level}]{'' if subject else ': '}{f"[{subject}]: " if subject else ""}{message}"
 
     @staticmethod
     def get_importance(level: str) -> bool:

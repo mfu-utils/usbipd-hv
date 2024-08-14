@@ -1,18 +1,18 @@
+import subprocess
 import os.path
 import re
-from time import sleep
+
 from typing import List, Tuple
+from time import sleep
 from sys import exit
 
 from src.DevicesFilters import DevicesFilters
-from src.Device import Device
 from src.DeviceStatus import DeviceStatus
 from src.FilterMode import FilterMode
-from src.Ini import Ini
-import subprocess
-
-from src.Log import Log
 from src.Utils.Filters import Filters
+from src.Device import Device
+from src.Ini import Ini
+from src.Log import Log
 
 
 def run(parameters: List[str]) -> Tuple[int, str]:
@@ -29,8 +29,9 @@ class Hypervisor:
     _FORCE = '--force'
     CMD_LIST = [_USBIPD, 'list']
     CMD_BIND = [_USBIPD, 'bind', '--busid']
-    # CMD_UNBIND = [_USBIPD, 'unbind', '--busid']
     CMD_ATTACH = [_USBIPD, 'attach', '--wsl', '--busid']
+
+    # CMD_UNBIND = [_USBIPD, 'unbind', '--busid']
     # CMD_DETACH = [_USBIPD, 'detach', '--busid']
 
     EMPTY = re.compile(r"\s\s+")
@@ -77,23 +78,33 @@ class Hypervisor:
         filtered = []
 
         for device in devices:
+            if device.state() == DeviceStatus.Attached:
+                self.__log.debug(f"Skip device ({device}). Has been attached.")
+                continue
+
             value = device.__getattribute__(filter_by)()
+
+            skip = False
 
             if mode == FilterMode.Key:
                 if not Filters.filter_key(value, _filter):
-                    continue
+                    skip = True
 
             elif mode == FilterMode.Regex:
                 regex = Filters.create_regex_filter(_filter, self.__log)
 
                 if not Filters.filter_regex(value, regex):
-                    continue
+                    skip = True
 
             elif mode == FilterMode.Like:
                 if not Filters.filter_like(value, _filter):
-                    continue
+                    skip = True
 
-            self.__log.debug(f"Append filtered device ({device}).")
+            if skip:
+                self.__log.debug(f"Filter device ({device}). Filtered by '{mode.name}'")
+                continue
+
+            self.__log.debug(f"Append device ({device}).")
             filtered.append(device)
 
         return filtered
@@ -154,6 +165,7 @@ class Hypervisor:
         ok, devices = self.__usb_ipd_list()
 
         if not ok:
+            self.__log.error("Failed to get devices. Hypervisor stopped.")
             exit(1)
 
         if not len(devices):
