@@ -14,7 +14,7 @@ VSVersionInfo(
       [
       StringTable(
         u'040904b0',
-        [StringStruct(u'CompanyName', u'None'),
+        [StringStruct(u'CompanyName', u'NONE'),
         StringStruct(u'FileDescription', u'Usbipd Hypervisor'),
         StringStruct(u'FileVersion', u'1.0.0.0'),
         StringStruct(u'InternalName', u'usbipd-hv'),

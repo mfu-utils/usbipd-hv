@@ -2,6 +2,7 @@
 
 echo Start build usbipd-hv
 
+set "VENV=.venv"
 set "BUILD_DIR=build"
 set "BUILT_TOOLS=build-tools"
 set "SCRIPTS=%VENV%\Scripts"
@@ -14,7 +15,7 @@ set "SPEC_FILE=build.spec"
 IF not exist %BUILD_DIR% (mkdir %BUILD_DIR%)
 
 :: Copy files for building
-robocopy src %BUILD_DIR%/src
+robocopy src %BUILD_DIR%\src /E
 
 copy requirements.txt %BUILD_DIR%
 copy install.bat %BUILD_DIR%
@@ -40,4 +41,4 @@ call %PY% -m pip install -r build-requirements.txt
 call %PYI% %SPEC_FILE% --workpath %WORKDIR% --distpath . > "%WORKDIR%\build_log.txt" 2>&1
 
 :: Create archive
-tar -cf usbipd-hv.zip filters.yaml config.ini usbipd-hv.exe
+tar -cf usbipd-hv.tar filters.yaml config.ini usbipd-hv.exe
