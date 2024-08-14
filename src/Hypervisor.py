@@ -162,15 +162,12 @@ class Hypervisor:
         filtered: List[Device] = []
 
         for _filter in self.__devices_filters:
-            res = self.__usb_ipd_filter(
+            filtered += self.__usb_ipd_filter(
                 list(set(devices) - set(filtered)),
                 _filter.filter_by(),
                 _filter.value(),
                 _filter.mode(),
             )
-
-            if len(res):
-                filtered.append(*res)
 
         return filtered
 

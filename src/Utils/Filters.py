@@ -17,6 +17,9 @@ class Filters:
 
         segments = value.split(_filter)
 
+        if len(segments) < 3:
+            return False
+
         if not start and segments[0]:
             return False
 
