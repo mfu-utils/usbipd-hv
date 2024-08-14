@@ -2,6 +2,7 @@ import os.path
 import re
 from time import sleep
 from typing import List, Tuple
+from sys import exit
 
 from src.DevicesFilters import DevicesFilters
 from src.Device import Device
