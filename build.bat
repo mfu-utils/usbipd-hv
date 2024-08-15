@@ -37,14 +37,14 @@ cd /d %BUILD_DIR%
 IF not exist %WORKDIR% (mkdir %WORKDIR%)
 
 :: Install requirements into build
-echo Start install. (%WORKDIR%\install_log.txt)
+echo Install requirements (%WORKDIR%\install_log.txt).
 call install.bat > "%WORKDIR%\install_log.txt"
 call %PY% -m pip install -r build-requirements.txt >> "%WORKDIR%\install_log.txt"
 
 :: Create .EXE file
-echo Start pyinstaller. (%WORKDIR%\build_log.txt)
+echo Generate .EXE file (%WORKDIR%\build_log.txt).
 call %PYI% %SPEC_FILE% --workpath %WORKDIR% --distpath . > "%WORKDIR%\build_log.txt" 2>&1
 
 :: Create archive
-echo Archive creation start.
+echo Create archive.
 tar -cf usbipd-hv.tar filters.yaml config.ini LICENSE usbipd-hv.exe
